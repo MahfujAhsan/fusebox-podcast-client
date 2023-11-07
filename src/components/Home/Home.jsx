@@ -2,6 +2,46 @@ import Layout from "../../Layout/Layout";
 import { FaForward, FaBackward, FaLessThan, FaGreaterThan } from "react-icons/fa"
 import Card from "../Card/Card";
 import { Link } from "react-router-dom";
+import SongBar from "../MasterBar/SongBar";
+
+const songs = [
+  {
+    id: Math.random() * Date.now(),
+    title: "Tum Hi Ho",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+  {
+    id: Math.random() * Date.now(),
+    title: "Ae Dil Hai Mushkil",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+  {
+    id: Math.random() * Date.now(),
+    title: "Mirchi Awards",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+  {
+    id: Math.random() * Date.now(),
+    title: "Judaiyaan",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+  {
+    id: Math.random() * Date.now(),
+    title: "Heeriye",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+  {
+    id: Math.random() * Date.now(),
+    title: "Tu hi Hai Aashiqui",
+    artist: "Arijit Singh",
+    mp3: new Audio("/assets/mp3/audio.mp3"),
+  },
+];
 
 
 export default function Home() {
@@ -9,8 +49,8 @@ export default function Home() {
     <Layout>
       <div className="flex justify-between items-center mt-4 mb-4">
         <div className="flex gap-2 items-center">
-          <FaLessThan className="bg-white/10 rounded-full text-3xl p-1"/>
-          <FaGreaterThan className="bg-white/10 rounded-full text-3xl p-1"/>
+          <FaLessThan className="bg-white/10 rounded-full text-3xl p-1" />
+          <FaGreaterThan className="bg-white/10 rounded-full text-3xl p-1" />
         </div>
         <div>
           <Link to="/signup" className="rounded-full px-8 py-2 font-bold text-white">
@@ -28,13 +68,11 @@ export default function Home() {
           <span>Show All</span>
         </div>
         <div className="grid gap-6 grid-cols-5 tertiary_bg">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {
+            songs.map((song) => {
+              return <Card key={song?.id} song={song} />
+            })
+          }
         </div>
         <div className="flex justify-between items-center my-4">
           <span className="text-xl font-bold hover:underline">Spotify List</span>
@@ -50,7 +88,7 @@ export default function Home() {
           <Card />
         </div>
       </div>
-
+      <SongBar />
     </Layout>
   )
 }

@@ -62,7 +62,7 @@ export default function Sidebar() {
                 <span className="text-white font-bold">English</span>
             </button>
 
-            <Signup />
+            {/* <Signup /> */}
         </div>
     )
 }
