@@ -15,7 +15,7 @@ const songs = [
     id: Math.random() * Date.now(),
     title: "Ae Dil Hai Mushkil",
     artist: "Arijit Singh",
-    mp3: new Audio("/assets/mp3/audio.mp3"),
+    mp3: new Audio("/assets/mp3/audio2.mp3"),
   },
   {
     id: Math.random() * Date.now(),

@@ -1,4 +1,4 @@
-import { PLAY_SONG_REQUEST, PAUSE_SONG_REQUEST} from "../Constants/SongConstant.jsx"
+import { PLAY_SONG_REQUEST, PAUSE_SONG_REQUEST, PAUSE_MASTER, PLAY_MASTER} from "../Constants/SongConstant.jsx"
 
 export const playSong = (song) => async (dispatch) => {
     dispatch({type: PLAY_SONG_REQUEST, payload: song});
@@ -6,4 +6,12 @@ export const playSong = (song) => async (dispatch) => {
 
 export const pauseSong = () => async (dispatch) => {
     dispatch({type: PAUSE_SONG_REQUEST});
+}
+
+export const pauseMaster = () => async (dispatch) => {
+    dispatch({type: PAUSE_MASTER});
+}
+
+export const playMaster = () => async (dispatch) => {
+    dispatch({type: PLAY_MASTER});
 }

@@ -9,6 +9,10 @@ export default function Card({ song }) {
 
     const handlePlay = (song) => {
         console.log("playing")
+        if(isPlaying) {
+            masterSong.mp3.currentTime = 0;
+            masterSong.mp3.pause()
+        }
         dispatch(playSong(song))
     }
 
@@ -18,7 +22,7 @@ export default function Card({ song }) {
     return (
         song && (<div className="card col-span-1 p-4 rounded-lg">
             <div className="relative">
-                <img src="/src//assets/card.webp" alt="" />
+                <img src="/src/assets/card.webp" alt="" />
                 {
                     masterSong?.id === song?.id && isPlaying ? (<button onClick={handlePause} className="flex items-center justify-center p-3 bg-green-500 rounded-full play_btn absolute bottom-0 right-0">
                         <FaPause className="text-black text-xl" />
