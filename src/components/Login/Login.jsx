@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./login.css";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
         email: "",
@@ -22,8 +23,6 @@ const Login = () => {
             username
         })
 
-        console.log(data)
-
         const res = await fetch('http://localhost:5000/api/user/login', {
             method: 'POST',
             headers: {
@@ -33,7 +32,12 @@ const Login = () => {
         })
 
         const dataRes = await res.json();
-        console.log(dataRes)
+        if(dataRes.success) {
+            toast.success(dataRes.message)
+            localStorage.setItem("token", JSON.stringify(dataRes.token))
+        } else {
+            toast.error(dataRes.message)
+        }
     }
 
     const onChange = (e) => {
@@ -42,9 +46,11 @@ const Login = () => {
     return (
         <>
             <header className="px-12 py-8">
-                <div className="logo w-full mx-auto">
-                    <img src="/src/assets/logo.png" className="mx-auto rounded-full" width={90} alt="" />
-                </div>
+                <Link to="/">
+                    <div className="logo w-full mx-auto">
+                        <img src="/src/assets/logo.png" className="mx-auto rounded-full" width={90} alt="" />
+                    </div>
+                </Link>
             </header>
             <div className="container py-10">
                 <div className="bg-black py-10 text-center w-1/2 mx-auto">

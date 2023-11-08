@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import "./Signup.css";
 import { useState } from "react";
+import { toast } from "react-toastify";
 const months = [
     "January",
     "February",
@@ -29,7 +30,6 @@ const Signup = () => {
     });
 
     const registerUser = async (e) => {
-        console.log(userDetails)
         e.preventDefault();
         const index = months.indexOf(userDetails.month)
         let DOB = `${index}-${userDetails.day}-${userDetails.year}`;
@@ -44,8 +44,6 @@ const Signup = () => {
             username
         })
 
-        console.log(data)
-
         const res = await fetch('http://localhost:5000/api/user/register', {
             method: 'POST',
             headers: {
@@ -55,6 +53,22 @@ const Signup = () => {
         })
 
         const dataRes = await res.json();
+        if (dataRes.success) {
+            setUserDetails({
+                email: "",
+                username: "",
+                day: "",
+                year: "",
+                month: "",
+                password: "",
+                gender: ""
+            })
+            toast.success(dataRes.message);
+
+            localStorage.setItem("token", data.token)
+        } else {
+            toast.error(dataRes.message)
+        }
         console.log(dataRes)
     }
 
@@ -77,12 +91,14 @@ const Signup = () => {
         <>
             <div className="container py-8 bg-white">
                 <div className="logo text-center">
-                    <img
-                        src="/src/assets/logo.png"
-                        className="mx-auto rounded-full"
-                        width={100}
-                        alt=""
-                    />
+                    <Link to="/">
+                        <img
+                            src="/src/assets/logo.png"
+                            className="mx-auto rounded-full"
+                            width={100}
+                            alt=""
+                        />
+                    </Link>
                 </div>
                 <div className=" text-black">
                     <div className="py-10 text-center w-1/2 mx-auto">
@@ -247,7 +263,7 @@ const Signup = () => {
                                             htmlFor="female"
                                             className="ml-2 inline-block"
                                         >
-                                            Male
+                                            Female
                                         </label>
                                     </div>
                                     <div className="">

@@ -1,5 +1,5 @@
 import Layout from "../../Layout/Layout";
-import { FaLessThan, FaGreaterThan } from "react-icons/fa"
+import { FaLessThan, FaGreaterThan, FaUser } from "react-icons/fa"
 import Card from "../Card/Card";
 import { Link } from "react-router-dom";
 import SongBar from "../MasterBar/SongBar";
@@ -53,13 +53,18 @@ export default function Home() {
           <FaGreaterThan className="bg-white/10 rounded-full text-3xl p-1" />
         </div>
         <div>
-          <Link to="/signup" className="rounded-full px-8 py-2 font-bold text-white">
-            Sign Up
-          </Link>
+          {
+            localStorage.getItem("token") ? <div>
+              <Link to="/signup" className="rounded-full px-8 py-2 font-bold text-white">
+                Sign Up
+              </Link>
 
-          <Link to="/login" className="rounded-full px-8 py-3 font-bold text-black bg-white text-base">
-            Log In
-          </Link>
+              <Link to="/login" className="rounded-full px-8 py-3 font-bold text-black bg-white text-base">
+                Log In
+              </Link>
+            </div> : <FaUser />
+          }
+          
         </div>
       </div>
       <div className="tertiary_bg mx-4 px-4 py-4">
