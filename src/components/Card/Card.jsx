@@ -2,16 +2,19 @@ import { FaPlay, FaPause } from "react-icons/fa"
 import "./Card.css"
 import { useSelector, useDispatch } from "react-redux"
 import { playSong, pauseSong } from "../../redux/Actors/SongActor";
+import { useGlobalContext } from "../../redux/Context";
 
-export default function Card({ song }) {
+export default function Card({ song, Idx }) {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
+    const { resetEverything, setSongIdx } = useGlobalContext();
     const dispatch = useDispatch()
 
     const handlePlay = (song) => {
-        console.log("playing")
-        if(isPlaying) {
+        setSongIdx(Idx)
+        if (isPlaying) {
             masterSong.mp3.currentTime = 0;
-            masterSong.mp3.pause()
+            masterSong.mp3.pause();
+            resetEverything();
         }
         dispatch(playSong(song))
     }

@@ -1,10 +1,10 @@
 import Layout from "../../Layout/Layout";
-import { FaForward, FaBackward, FaLessThan, FaGreaterThan } from "react-icons/fa"
+import { FaLessThan, FaGreaterThan } from "react-icons/fa"
 import Card from "../Card/Card";
 import { Link } from "react-router-dom";
 import SongBar from "../MasterBar/SongBar";
 
-const songs = [
+export const songs = [
   {
     id: Math.random() * Date.now(),
     title: "Tum Hi Ho",
@@ -69,8 +69,8 @@ export default function Home() {
         </div>
         <div className="grid gap-6 grid-cols-5 tertiary_bg">
           {
-            songs.map((song) => {
-              return <Card key={song?.id} song={song} />
+            songs.map((song, i) => {
+              return <Card key={song?.id} Idx={i} song={song} />
             })
           }
         </div>

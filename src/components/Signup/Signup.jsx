@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import "./Signup.css";
+import { useState } from "react";
 const months = [
     "January",
     "February",
@@ -17,6 +18,61 @@ const months = [
 ];
 
 const Signup = () => {
+    const [userDetails, setUserDetails] = useState({
+        email: "",
+        username: "",
+        day: "",
+        year: "",
+        month: "",
+        password: "",
+        gender: ""
+    });
+
+    const registerUser = async (e) => {
+        console.log(userDetails)
+        e.preventDefault();
+        const index = months.indexOf(userDetails.month)
+        let DOB = `${index}-${userDetails.day}-${userDetails.year}`;
+
+        const { email, password, gender, username } = userDetails;
+
+        let data = JSON.stringify({
+            email,
+            password,
+            gender,
+            DOB,
+            username
+        })
+
+        console.log(data)
+
+        const res = await fetch('http://localhost:5000/api/user/register', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: data
+        })
+
+        const dataRes = await res.json();
+        console.log(dataRes)
+    }
+
+    const onChange = (e) => {
+        setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
+        if (e.target.name === "gender") {
+            if (e.target.id === "male") {
+                setUserDetails({ ...userDetails, gender: 'M' })
+            }
+            if (e.target.id === "female") {
+                setUserDetails({ ...userDetails, gender: 'F' })
+            }
+            if (e.target.id === "other") {
+                setUserDetails({ ...userDetails, gender: 'O' })
+            }
+            return;
+        }
+    }
     return (
         <>
             <div className="container py-8 bg-white">
@@ -37,7 +93,7 @@ const Signup = () => {
                         <p className="my-4 font-bold">
                             Sign up with your email address
                         </p>
-                        <form className="text-center mx-auto w-3/4 ">
+                        <form onSubmit={registerUser} className="text-center mx-auto w-3/4 ">
                             <div className="w-4/5 mx-auto text-left py-4">
                                 <label
                                     htmlFor="email"
@@ -49,36 +105,42 @@ const Signup = () => {
                                     type="text"
                                     id="email"
                                     name="email"
+                                    value={userDetails.email}
+                                    onChange={onChange}
                                     placeholder="Enter your email"
                                     className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                 />
                             </div>
                             <div className="w-4/5 mx-auto text-left py-4">
                                 <label
-                                    htmlFor="email"
+                                    htmlFor="password"
                                     className="font-semibold mb-2 text-sm inline-block"
                                 >
                                     Create a password{" "}
                                 </label>
                                 <input
                                     type="text"
-                                    id="email"
-                                    name="email"
+                                    id="password"
+                                    name="password"
+                                    value={userDetails.password}
+                                    onChange={onChange}
                                     placeholder="Create a password"
                                     className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                 />
                             </div>
                             <div className="w-4/5 mx-auto text-left py-4">
                                 <label
-                                    htmlFor="email"
+                                    htmlFor="username"
                                     className="font-semibold mb-2 text-sm inline-block"
                                 >
                                     What should we call you?{" "}
                                 </label>
                                 <input
                                     type="text"
-                                    id="email"
-                                    name="email"
+                                    id="username"
+                                    name="username"
+                                    value={userDetails.username}
+                                    onChange={onChange}
                                     placeholder="Create a password"
                                     className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                 />
@@ -87,7 +149,7 @@ const Signup = () => {
                             <div className="text-left"></div>
                             <div className="w-4/5 mx-auto text-left py-4">
                                 <label
-                                    htmlFor="password"
+                                    htmlFor="date"
                                     className="font-semibold mb-2 text-sm inline-block"
                                 >
                                     What's your date of birth?
@@ -95,30 +157,34 @@ const Signup = () => {
                                 <div className="flex gap-8">
                                     <div className="w-1/4">
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="day"
                                             className="ml-2 inline-block"
                                         >
                                             Day
                                         </label>
                                         <input
                                             type="text"
-                                            id="password"
-                                            name="password"
+                                            id="day"
+                                            name="day"
                                             placeholder="DD"
+                                            value={userDetails.day}
+                                            onChange={onChange}
                                             className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                         />
                                     </div>
                                     <div className="w-2/4">
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="month"
                                             className="ml-2 inline-block"
                                         >
                                             Month
                                         </label>
                                         <select
                                             type="radio"
-                                            id="password"
-                                            name="password"
+                                            id="month"
+                                            name="month"
+                                            value={userDetails.month}
+                                            onChange={onChange}
                                             placeholder="Password"
                                             className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                         >
@@ -133,15 +199,17 @@ const Signup = () => {
                                     </div>
                                     <div className="w-1/4">
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="year"
                                             className="ml-2 inline-block"
                                         >
                                             Year
                                         </label>
                                         <input
                                             type="text"
-                                            id="password"
-                                            name="password"
+                                            id="year"
+                                            name="year"
+                                            value={userDetails.year}
+                                            onChange={onChange}
                                             placeholder="YYYY"
                                             className="block w-full rounded-[4px] border-0  text-black transition-all duration-200 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[3px] focus:ring-inset focus:ring-white-600 outline-none p-3 hover:ring-black bg-[#fff]"
                                         />
@@ -151,13 +219,15 @@ const Signup = () => {
                                     <div className="">
                                         <input
                                             type="radio"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Password"
+                                            id="male"
+                                            name="gender"
+                                            value={userDetails.gender}
+                                            onChange={onChange}
+                                            placeholder="gender"
                                             className=""
                                         />
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="male"
                                             className="ml-2 inline-block"
                                         >
                                             Male
@@ -166,13 +236,15 @@ const Signup = () => {
                                     <div className="">
                                         <input
                                             type="radio"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Password"
+                                            id="female"
+                                            name="gender"
+                                            value={userDetails.gender}
+                                            onChange={onChange}
+                                            placeholder="gender"
                                             className=""
                                         />
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="female"
                                             className="ml-2 inline-block"
                                         >
                                             Male
@@ -181,13 +253,15 @@ const Signup = () => {
                                     <div className="">
                                         <input
                                             type="radio"
-                                            id="password"
-                                            name="password"
+                                            id="other"
+                                            name="gender"
+                                            value={userDetails.gender}
+                                            onChange={onChange}
                                             placeholder="Password"
                                             className=""
                                         />
                                         <label
-                                            htmlFor="password"
+                                            htmlFor="other"
                                             className="ml-2 inline-block"
                                         >
                                             Prefer not to say
