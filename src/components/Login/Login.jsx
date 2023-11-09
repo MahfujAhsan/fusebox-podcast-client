@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { userActor } from "../../redux/Actors/UserActor";
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
         email: "",
@@ -12,6 +14,9 @@ const Login = () => {
         password: "",
         gender: ""
     });
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user, isAuthenticated } = useSelector((state) => state.account);
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -32,9 +37,11 @@ const Login = () => {
         })
 
         const dataRes = await res.json();
-        if(dataRes.success) {
+        if (dataRes.success) {
             toast.success(dataRes.message)
             localStorage.setItem("token", JSON.stringify(dataRes.token))
+            dispatch(userActor(dataRes.user));
+            navigate("/")
         } else {
             toast.error(dataRes.message)
         }
@@ -43,6 +50,12 @@ const Login = () => {
     const onChange = (e) => {
         setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
     }
+
+    useEffect(() => {
+        if(isAuthenticated) {
+            navigate("/")
+        }
+    }, [])
     return (
         <>
             <header className="px-12 py-8">

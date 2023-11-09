@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { AiOutlineHeart, AiOutlinePlaySquare } from "react-icons/ai"
+import { AiOutlineHeart, AiOutlinePlaySquare, AiOutlineShareAlt, AiOutlineWifi } from "react-icons/ai"
 import { IoMdSkipForward, IoMdSkipBackward } from "react-icons/io"
 import { CgScreen } from "react-icons/cg"
 import { BiShuffle, BiRepeat } from "react-icons/bi"
@@ -8,11 +8,13 @@ import { FaPlay, FaPause } from "react-icons/fa"
 import { PiMicrophoneStageDuotone } from "react-icons/pi"
 import { HiOutlineQueueList, HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2"
 import { BsSpeakerFill, BsArrowsAngleContract } from "react-icons/bs"
+import { TfiMenuAlt } from "react-icons/tfi"
 import { pauseMaster, playMaster, playSong } from "../../redux/Actors/SongActor"
 import { useGlobalContext } from "../../redux/Context"
 import "./SongBar.css"
 import { useState } from "react"
 import { songs } from "../Home/Home"
+import fusebox from "../../assets/fusbox.jpg"
 
 
 export default function SongBar() {
@@ -51,7 +53,7 @@ export default function SongBar() {
                 }
             }, 1000)
         }
-    }, [masterSong, isPlaying]);
+    }, [masterSong, isPlaying, dispatch, progress, resetEverything, setCurrTime, setDuration, setProgress]);
 
     const mouseEnter = () => {
         document.querySelector(".active_progress").style.background = "green"
@@ -70,23 +72,32 @@ export default function SongBar() {
     }
 
     const backwardSong = () => {
+        console.log("click backward")
+        if (songIdx <= 0) {
+            return;
+        }
         if (masterSong.mp3) {
             masterSong?.mp3?.pause();
             masterSong.mp3.currentTime = 0;
         }
         resetEverything();
         setSongIdx((prevState) => prevState - 1)
-        dispatch(playSong(songs[songIdx - 1]))
+        // dispatch(playSong(songs[songIdx - 1]))
     }
 
     const forwardSong = () => {
+        console.log("click forward")
+        
+        if (songIdx >= 5 - 1) {
+            return;
+        }
         if (masterSong.mp3) {
             masterSong?.mp3?.pause();
             masterSong.mp3.currentTime = 0;
         }
         resetEverything();
         setSongIdx((prevState) => prevState + 1)
-        dispatch(playSong(songs[songIdx + 1]))
+        // dispatch(playSong(songs[songIdx + 1]))
     }
 
     const changeProgress = (e) => {
@@ -109,36 +120,39 @@ export default function SongBar() {
         return formattedDuration;
     }
     return (
-        <div className="fixed px-2 bottom-0 left-0 h-20 bg-black w-full flex items-center justify-between">
+        <div className="px-2 top-0 left-0 py-2 bg-green-600 w-11/12 mx-auto rounded-lg flex items-center justify-between z-50 mt-2">
             <div className="w-2/12">
                 <div className="flex items-center gap-2">
-                    <img src="/src/assets/card.webp" alt="" className="h-20" />
-                    <div>
+                    <img src={fusebox} alt="" className="h-36 rounded-lg" />
+                    {/* <div>
                         <h3 className="text-xs font-medium mb-1">{masterSong.title || "Arijit Singh"}</h3>
                         <span className="text-[10px]">{masterSong?.artist || "Arijit Singh"}</span>
                     </div>
                     <AiOutlineHeart className="ml-3" />
-                    <CgScreen className="ml-3" />
+                    <CgScreen className="ml-3" /> */}
                 </div>
             </div>
-            <div className="w-5/12">
-                <div className="flex justify-center items-center mb-2 gap-6">
-                    <BiShuffle />
-                    <IoMdSkipBackward onClick={backwardSong} />
-                    {
-                        isPlaying ? (<button onClick={handleMaster} className="flex items-center justify-center p-2 bg-white rounded-full">
-                            <FaPause className="text-black text-lg" />
-                        </button>) : (<button onClick={handleMaster} className="flex items-center justify-center p-2 bg-white rounded-full">
-                            <FaPlay className="text-black text-lg" />
-                        </button>)
-                    }
-                    <IoMdSkipForward onClick={forwardSong} />
-                    <BiRepeat />
-                </div>
-                <div className="flex items-center">
-                    <span className="text-[10px] w-[50px]">
+            <div className="flex justify-center items-center mb-2 gap-6 border-[6px] rounded-full border-green-700 ml-16">
+                {/* <BiShuffle />
+                    <IoMdSkipBackward onClick={backwardSong} /> */}
+                {
+                    isPlaying ? (<button onClick={handleMaster} className="flex items-center justify-center p-7 bg-white rounded-full">
+                        <FaPause className="text-green-700 text-lg" size={40} />
+                    </button>) : (<button onClick={handleMaster} className="flex items-center justify-center p-7 bg-white rounded-full">
+                            <FaPlay className="text-green-700 text-lg" size={40} />
+                    </button>)
+                }
+                {/* <IoMdSkipForward onClick={forwardSong} />
+                    <BiRepeat /> */}
+            </div>
+            <div className="w-full flex  flex-col gap-x-6 h-full">
+                
+                {/* Player Button Moved to upper line */}
+                <h3 className="text-left w-8/12 mx-auto font-bold text-lg py-2">{masterSong.title}</h3>
+                <div className="flex items-center w-8/12 gap-x-8 mx-auto">
+                    {/* <span className="text-[10px] w-[50px]">
                         {currTime}
-                    </span>
+                    </span> */}
                     <div className="relative w-full flex items-center">
                         <input
                             type="range"
@@ -157,17 +171,64 @@ export default function SongBar() {
 
                         </div>
                     </div>
-                    <span className="text-[10px] w-[50px] ml-4">
+                    {/* <span className="text-[10px] w-[50px] ml-4">
                         {duration}
-                    </span>
+                    </span> */}
+                </div>
+                <div className="items-center w-8/12 mx-auto pt-4 flex space-x-7 justify-between">
+                    <div className="flex items-center space-x-4">
+                        <div className="border-2 px-4 py-[3px] rounded-full cursor-pointer">
+                            <IoMdSkipBackward onClick={backwardSong} />
+                        </div>
+                        <div className="border-2 px-4 py-[3px] rounded-full cursor-pointer">
+                            <IoMdSkipForward onClick={forwardSong} />
+                        </div>
+                        
+                        <div data-tooltip="Tooltip help here!" className="flex items-center space-x-4 border-2 rounded-full cursor-pointer px-2">
+                            {volume <= 0 && <HiSpeakerXMark className="text-2xl" size={24} />}
+                            {volume > 0 && <HiSpeakerWave className="text-2xl" size={24} />}
+                            <div className="relative w-full flex items-center">
+                                <input
+                                    type="range"
+                                    name=""
+                                    min={0}
+                                    max={100}
+                                    className="w-full block"
+                                    value={volume}
+                                    onChange={changeVolume}
+                                    disabled={!masterSong.mp3}
+                                    onMouseEnter={enterVolume}
+                                    onMouseLeave={leaveVolume}
+                                />
+                                <div id="volume" className={`active_progress w-[${volume}%]`}>
+
+                                </div>
+                            </div>
+                       </div>
+                    </div>
+
+                    <div>
+                        <span className="text-[10px] w-[50px] text-base">
+                            {currTime} / {duration}
+                        </span>
+                        
+                        {/* <span className="text-[10px] w-[50px] ml-4">
+                            
+                        </span> */}
+                    </div>
                 </div>
             </div>
-            <div className="w-2/12 flex items-center gap-1">
-                <AiOutlinePlaySquare className="text-2xl" />
+            <div className="w-2/12 flex items-center flex-col gap-1 pr-12">
+                <button className="flex items-center gap-x-2 bg-white text-black px-5 py-2 text-xl border-[6px] rounded-full border-green-700"><AiOutlineWifi style={{ transform: 'rotate(45deg)' }} size={24}/> Subscribe</button>
+                <div className="flex space-x-6 mt-4">
+                    <TfiMenuAlt className="cursor-pointer" size={25} />
+                    <AiOutlineShareAlt className="cursor-pointer" size={25} />
+                </div>
+                {/* <AiOutlinePlaySquare className="text-2xl" />
                 <PiMicrophoneStageDuotone className="text-2xl" />
                 <HiOutlineQueueList className="text-2xl" />
-                <BsSpeakerFill className="text-2xl" />
-                {volume <= 0 && <HiSpeakerXMark className="text-2xl" />}
+                <BsSpeakerFill className="text-2xl" /> */}
+                {/* {volume <= 0 && <HiSpeakerXMark className="text-2xl" />}
                 {volume > 0 && <HiSpeakerWave className="text-2xl" />}
                 <div className="relative w-full flex items-center">
                     <input
@@ -185,8 +246,8 @@ export default function SongBar() {
                     <div id="volume" className={`active_progress w-[${volume}%]`}>
 
                     </div>
-                </div>
-                <BsArrowsAngleContract />
+                </div> */}
+                {/* <BsArrowsAngleContract /> */}
             </div>
             <div className="hidden">
                 <div className="w-[0%]"></div>

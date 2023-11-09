@@ -15,8 +15,8 @@ export default function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            {/* <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} /> */}
           </Routes>
         </Router>
         <ToastContainer

@@ -14,7 +14,7 @@
 }
 
 body {
-  background-color: #000;
+  /* background-color: #000; */
   color: #fff;
   scroll-behavior: smooth;
 }
@@ -31,5 +31,6 @@ body {
 }
 
 .tertiary_bg {
-  background: var(--tertiary_bg);
+  /* background: var(--tertiary_bg); */
+  background-color: rgba(0, 0, 0, 0.1);
 }
