@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { AiOutlineShareAlt, AiOutlineWifi } from "react-icons/ai"
+import { AiOutlineShareAlt, AiOutlineWifi, AiFillClockCircle } from "react-icons/ai"
 import { IoMdSkipForward, IoMdSkipBackward } from "react-icons/io"
 import { FaPlay, FaPause } from "react-icons/fa"
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2"
@@ -16,6 +16,7 @@ import fusebox from "../../assets/fusbox.jpg"
 export default function SongBar() {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
     const { progress, setProgress, resetEverything, currTime, setCurrTime, duration, setDuration, songIdx, setSongIdx } = useGlobalContext()
+    const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
     const dispatch = useDispatch();
 
@@ -100,6 +101,32 @@ export default function SongBar() {
         setVolume(e.target.value)
         masterSong.mp3.volume = e.target.value / 100
     }
+    
+
+    const backTen = () => {
+        if (masterSong.mp3) {
+            const currentTime = masterSong.mp3.currentTime - 10; // Add 30 seconds
+            const newProgress = (currentTime / masterSong.mp3.duration) * 100;
+            masterSong.mp3.currentTime = currentTime;
+            setProgress(newProgress);
+        }
+    };
+
+    const forwardTen = () => {
+        if (masterSong.mp3) {
+            const currentTime = masterSong.mp3.currentTime + 10; // Add 30 seconds
+            const newProgress = (currentTime / masterSong.mp3.duration) * 100;
+            masterSong.mp3.currentTime = currentTime;
+            setProgress(newProgress);
+        }
+    };
+
+    const changePlaybackSpeed = (newSpeed) => {
+        if (masterSong.mp3) {
+            masterSong.mp3.playbackRate = newSpeed;
+            setPlaybackSpeed(newSpeed);
+        }
+    };
 
     const formatTime = (durationInSeconds) => {
         if (!isNaN(durationInSeconds)) {
@@ -150,16 +177,25 @@ export default function SongBar() {
                 </div>
                 <div className="items-center w-8/12 mx-auto pt-4 flex space-x-7 justify-between">
                     <div className="flex items-center space-x-4">
-                        <div onClick={backwardSong} className="border-2 px-4 py-[3px] rounded-full cursor-pointer">
+                        <div onClick={backwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm">
                             <IoMdSkipBackward />
                         </div>
-                        <div onClick={forwardSong} className="border-2 px-4 py-[3px] rounded-full cursor-pointer">
+                        <div onClick={forwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm space-x-1">
                             <IoMdSkipForward />
                         </div>
 
-                        <div data-tooltip="Tooltip help here!" className="flex items-center space-x-4 border-2 rounded-full cursor-pointer px-2">
-                            {volume <= 0 && <HiSpeakerXMark className="text-2xl" size={24} />}
-                            {volume > 0 && <HiSpeakerWave className="text-2xl" size={24} />}
+                        <button className="flex items-center border-2 px-3 rounded-full cursor-pointer text-sm space-x-1" onClick={() => changePlaybackSpeed(1)}>
+                            <AiFillClockCircle />
+                            <span>1x</span>
+                        </button>
+                        <button className="flex items-center border-2 px-3 rounded-full cursor-pointer text-sm" onClick={() => changePlaybackSpeed(1.5)}>
+                            <AiFillClockCircle />
+                            <span>1.5x</span>
+                        </button>
+
+                        <div className="flex items-center space-x-4 border-2 rounded-full cursor-pointer px-2 w-[150px]">
+                            {volume <= 0 && <HiSpeakerXMark className="text-2xl" size={20} />}
+                            {volume > 0 && <HiSpeakerWave className="text-2xl" size={20} />}
                             <div className="relative w-full flex items-center">
                                 <input
                                     type="range"
@@ -180,7 +216,7 @@ export default function SongBar() {
                     </div>
 
                     <div>
-                        <span className="text-[10px] w-[50px] text-base">
+                        <span className="text-[10px] w-[50px] text-sm">
                             {currTime} / {duration}
                         </span>
                     </div>
