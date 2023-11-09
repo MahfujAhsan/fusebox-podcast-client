@@ -1,9 +1,0 @@
-.your_library {
-    height: 20rem;
-    overflow-y: scroll;
-}
-
-.your_library::-webkit-scrollbar {
-    width: 12px;
-    background-color: #ffffff75;
-}
