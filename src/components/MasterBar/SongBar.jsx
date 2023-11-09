@@ -102,11 +102,13 @@ export default function SongBar() {
     }
 
     const formatTime = (durationInSeconds) => {
-        let minutes = Math.floor(durationInSeconds / 60);
-        let seconds = Math.round(durationInSeconds % 60);
-        let formattedDuration = `${minutes < 10 ? "0" + minutes : minutes}: ${seconds < 9 ? "0" + seconds : seconds}`;
-
-        return formattedDuration;
+        if (!isNaN(durationInSeconds)) {
+            let minutes = Math.floor(durationInSeconds / 60);
+            let seconds = Math.round(durationInSeconds % 60);
+            return `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+        } else {
+            return "00:00"; // Return a default value when duration is not available
+        }
     }
     return (
         <div className="px-2 top-0 left-0 py-2 bg-green-600 w-11/12 mx-auto rounded-lg flex items-center justify-between z-50 mt-2">

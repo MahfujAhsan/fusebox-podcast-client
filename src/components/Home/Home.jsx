@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import Layout from "../../Layout/Layout";
 import Card from "../Card/Card";
 import SongBar from "../MasterBar/SongBar";
+import { useDispatch } from "react-redux";
+import { setInitialSong } from "../../redux/Actors/SongActor";
 export const songs = [
   {
     id: Math.random() * Date.now(),
@@ -36,6 +39,13 @@ export const songs = [
 
 
 export default function Home() {
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const initialSong = songs[0];
+    dispatch(setInitialSong(initialSong));
+  }, [dispatch]);
+
   return (
     <Layout>
       <SongBar />
@@ -49,7 +59,7 @@ export default function Home() {
           }
         </div>
       </div>
-      
+
     </Layout>
   )
 }

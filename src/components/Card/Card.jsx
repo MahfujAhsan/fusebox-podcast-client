@@ -7,7 +7,9 @@ import { useGlobalContext } from "../../redux/Context";
 export default function Card({ song, Idx }) {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
     const { resetEverything, setSongIdx } = useGlobalContext();
-    const dispatch = useDispatch()
+
+    const dispatch = useDispatch();
+
 
     const handlePlay = (song) => {
         setSongIdx(Idx)
@@ -24,15 +26,17 @@ export default function Card({ song, Idx }) {
     }
 
     const formatTime = (durationInSeconds) => {
-        let minutes = Math.floor(durationInSeconds / 60);
-        let seconds = Math.round(durationInSeconds % 60);
-        let formattedDuration = `${minutes < 10 ? "0" + minutes : minutes}: ${seconds < 9 ? "0" + seconds : seconds}`;
-
-        return formattedDuration;
+        if (!isNaN(durationInSeconds)) {
+            let minutes = Math.floor(durationInSeconds / 60);
+            let seconds = Math.round(durationInSeconds % 60);
+            return `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+        } else {
+            return "00:00"; // Return a default value when duration is not available
+        }
     }
     return (
         song && (<div className="card p-4 rounded-lg flex items-center justify-between">
-            
+
             <div className="flex items-center space-x-12">
                 <div>
                     {
