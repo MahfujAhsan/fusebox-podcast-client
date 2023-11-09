@@ -43,8 +43,8 @@ export const songs = [
 
 
 export default function Home() {
-  const { user, isAuthenticated } = useSelector((state) => state.account)
-  const dispatch = useDispatch();
+  // const { user, isAuthenticated } = useSelector((state) => state.account)
+  // const dispatch = useDispatch();
 
 
   // const getUser = async () => {

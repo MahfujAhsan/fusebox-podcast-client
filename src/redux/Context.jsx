@@ -13,7 +13,7 @@ export const AppProvider = ({ children }) => {
         setProgress(0);
         setCurrTime("00:00");
         setDuration("00:00")
-        setSongIdx((prevState) => prevState + 1)
+        // setSongIdx((prevState) => prevState + 1)
     };
 
     return <AppContext.Provider value={{

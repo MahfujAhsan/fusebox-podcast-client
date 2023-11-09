@@ -41,7 +41,7 @@ export default function SongBar() {
             }
         }
         if (isPlaying) {
-            setInterval(() => {
+            const progressInterval = setInterval(() => {
                 if (progress === 100) {
                     dispatch(pauseMaster())
                     resetEverything();
@@ -52,8 +52,10 @@ export default function SongBar() {
                     setCurrTime(formatTime(masterSong.mp3.currentTime))
                 }
             }, 1000)
+
+            return () => clearInterval(progressInterval);
         }
-    }, [masterSong, isPlaying, dispatch, progress, resetEverything, setCurrTime, setDuration, setProgress]);
+    }, [masterSong, isPlaying]);
 
     const mouseEnter = () => {
         document.querySelector(".active_progress").style.background = "green"
@@ -71,33 +73,53 @@ export default function SongBar() {
         document.querySelector("#volume").style.background = "#fff"
     }
 
+    // const backwardSong = () => {
+    //     console.log("click backward")
+    //     if (songIdx <= 0) {
+    //         return;
+    //     }
+    //     if (masterSong.mp3) {
+    //         masterSong?.mp3?.pause();
+    //         masterSong.mp3.currentTime = 0;
+    //     }
+    //     resetEverything();
+    //     setSongIdx((prevState) => prevState - 1)
+    //     dispatch(playSong(songs[songIdx - 1]))
+    // }
+
     const backwardSong = () => {
-        console.log("click backward")
-        if (songIdx <= 0) {
-            return;
-        }
-        if (masterSong.mp3) {
+        if (songIdx > 0) {
             masterSong?.mp3?.pause();
             masterSong.mp3.currentTime = 0;
+            resetEverything();
+            setSongIdx((prevState) => prevState - 1);
+            dispatch(playSong(songs[songIdx - 1]));
         }
-        resetEverything();
-        setSongIdx((prevState) => prevState - 1)
-        // dispatch(playSong(songs[songIdx - 1]))
     }
 
-    const forwardSong = () => {
-        console.log("click forward")
+    // const forwardSong = () => {
+    //     console.log("click forward")
         
-        if (songIdx >= 5 - 1) {
-            return;
-        }
-        if (masterSong.mp3) {
+    //     if (songIdx >= 5 - 1) {
+    //         return;
+    //     }
+    //     if (masterSong.mp3) {
+    //         masterSong?.mp3?.pause();
+    //         masterSong.mp3.currentTime = 0;
+    //     }
+    //     resetEverything();
+    //     setSongIdx((prevState) => prevState + 1)
+    //     dispatch(playSong(songs[songIdx + 1]))
+    // }
+
+    const forwardSong = () => {
+        if (songIdx < songs.length - 1) {
             masterSong?.mp3?.pause();
             masterSong.mp3.currentTime = 0;
+            resetEverything();
+            setSongIdx((prevState) => prevState + 1);
+            dispatch(playSong(songs[songIdx + 1]));
         }
-        resetEverything();
-        setSongIdx((prevState) => prevState + 1)
-        // dispatch(playSong(songs[songIdx + 1]))
     }
 
     const changeProgress = (e) => {
