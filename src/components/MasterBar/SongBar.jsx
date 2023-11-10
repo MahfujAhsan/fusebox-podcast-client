@@ -143,13 +143,13 @@ export default function SongBar() {
         setIsSubscribed(!isSubscribed);
     };
     return (
-        <div className="px-2 top-0 left-0 py-2 bg-green-600 w-11/12 mx-auto rounded-lg flex items-center justify-between z-50 mt-2">
+        <div className="px-2 top-0 left-0 py-2 bg-green-600 w-11/12 mx-auto rounded-lg flex items-center justify-between sm:flex-col lg:flex-row z-50 mt-2">
             <div className="w-2/12">
                 <div className="flex items-center gap-2">
                     <img src={fusebox} alt="" className="h-36 rounded-lg" />
                 </div>
             </div>
-            <div className="flex justify-center items-center mb-2 gap-6 border-[6px] rounded-full border-green-700 ml-16">
+            <div className="flex justify-center items-center mb-2 gap-6 border-[6px] rounded-full border-green-700 sm:ml-0 lg:ml-16 sm:mt-5 lg:mt-0">
                 {
                     isPlaying ? (<button onClick={handleMaster} className="flex items-center justify-center p-7 bg-white rounded-full">
                         <FaPause className="text-green-700 text-lg" size={40} />
