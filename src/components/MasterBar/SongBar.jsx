@@ -1,10 +1,9 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { AiOutlineShareAlt, AiOutlineWifi, AiFillClockCircle } from "react-icons/ai"
+import { AiOutlineWifi, AiFillClockCircle } from "react-icons/ai"
 import { IoMdSkipForward, IoMdSkipBackward } from "react-icons/io"
 import { FaPlay, FaPause } from "react-icons/fa"
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2"
-import { TfiMenuAlt } from "react-icons/tfi"
+import { HiSpeakerWave, HiSpeakerXMark, HiForward, HiBackward } from "react-icons/hi2"
 import { pauseMaster, playMaster, playSong } from "../../redux/Actors/SongActor"
 import { useGlobalContext } from "../../redux/Context"
 import "./SongBar.css"
@@ -17,6 +16,7 @@ export default function SongBar() {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
     const { progress, setProgress, resetEverything, currTime, setCurrTime, duration, setDuration, songIdx, setSongIdx } = useGlobalContext()
     const [playbackSpeed, setPlaybackSpeed] = useState(1);
+    const [isSubscribed, setIsSubscribed] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -101,7 +101,7 @@ export default function SongBar() {
         setVolume(e.target.value)
         masterSong.mp3.volume = e.target.value / 100
     }
-    
+
 
     const backTen = () => {
         if (masterSong.mp3) {
@@ -137,6 +137,11 @@ export default function SongBar() {
             return "00:00"; // Return a default value when duration is not available
         }
     }
+
+    const handleClick = () => {
+        // Toggle the state when the button is clicked
+        setIsSubscribed(!isSubscribed);
+    };
     return (
         <div className="px-2 top-0 left-0 py-2 bg-green-600 w-11/12 mx-auto rounded-lg flex items-center justify-between z-50 mt-2">
             <div className="w-2/12">
@@ -176,12 +181,21 @@ export default function SongBar() {
                     </div>
                 </div>
                 <div className="items-center w-8/12 mx-auto pt-4 flex space-x-7 justify-between">
-                    <div className="flex items-center space-x-4">
-                        <div onClick={backwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm">
+                    <div className="flex items-center space-x-3">
+                        {/* <div onClick={backwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm">
                             <IoMdSkipBackward />
                         </div>
                         <div onClick={forwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm space-x-1">
                             <IoMdSkipForward />
+                        </div> */}
+
+                        <div onClick={backTen} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-xs flex item-center gap-1">
+                            <HiBackward size={14} />
+                            10s
+                        </div>
+                        <div onClick={forwardTen} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-xs flex item-center gap-1">
+                            <HiForward />
+                            10s
                         </div>
 
                         <button className="flex items-center border-2 px-3 rounded-full cursor-pointer text-sm space-x-1" onClick={() => changePlaybackSpeed(1)}>
@@ -223,11 +237,19 @@ export default function SongBar() {
                 </div>
             </div>
             <div className="w-2/12 flex items-center flex-col gap-1 pr-12">
-                <button className="flex items-center gap-x-2 bg-white text-black px-5 py-2 text-xl border-[6px] rounded-full border-green-700"><AiOutlineWifi style={{ transform: 'rotate(45deg)' }} size={24} /> Subscribe</button>
-                <div className="flex space-x-6 mt-4">
-                    <TfiMenuAlt className="cursor-pointer" size={25} />
-                    <AiOutlineShareAlt className="cursor-pointer" size={25} />
+                <button onClick={handleClick} className="flex items-center gap-x-2 bg-white text-black px-5 py-2 text-xl border-[6px] rounded-full border-green-700"><AiOutlineWifi style={{ transform: 'rotate(45deg)' }} size={24} /> {isSubscribed ? "Subscribed" : "Subscribe"}</button>
+
+                <div className="flex item-center space-x-4 mt-2">
+                    <div onClick={backwardSong} className="border-2 px-2 py-[1px] rounded-full cursor-pointer text-sm flex items-center gap-2">
+                        <IoMdSkipBackward size={12}/>
+                        prev
+                    </div>
+                    <div onClick={forwardSong} className="border-2 px-2 py-[1px] rounded-full cursor-pointer text-sm flex items-center gap-2">
+                        <IoMdSkipForward size={12} />
+                        next
+                    </div>
                 </div>
+
             </div>
             <div className="hidden">
                 <div className="w-[0%]"></div>
