@@ -72,9 +72,15 @@ export default function Home() {
     };
   }, [dispatch]);
 
+  const initialSong = songs[0];
+  const initialSongDuration = loadedDurations.find(
+    (duration) => duration.id === initialSong.id
+  )?.duration;
+
   return (
     <Layout>
-      <SongBar selectedSongDuration={selectedSongDuration} />
+      <SongBar selectedSongDuration={selectedSongDuration, initialSongDuration}
+         />
       <div className="tertiary_bg px-4 py-4 pt-12 w-11/12 mx-auto my-4 rounded-lg">
         <div className="grid gap-6 grid-cols-1">
           <p className="ml-5 text-2xl text-black font-semibold border-b-2 border-black w-[150px] pb-1">All Episodes</p>

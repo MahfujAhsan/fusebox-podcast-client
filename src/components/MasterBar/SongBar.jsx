@@ -12,7 +12,7 @@ import { songs } from "../Home/Home"
 import fusebox from "../../assets/fusbox.jpg"
 
 
-export default function SongBar({ selectedSongDuration }) {
+export default function SongBar({ selectedSongDuration, initialSongDuration }) {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
     const { progress, setProgress, resetEverything, currTime, setCurrTime, duration, setDuration, songIdx, setSongIdx } = useGlobalContext()
     const [playbackSpeed, setPlaybackSpeed] = useState(1);
@@ -232,7 +232,7 @@ export default function SongBar({ selectedSongDuration }) {
 
                     <div>
                         <span className="text-[10px] w-[50px] text-sm">
-                            {currTime} / {duration}
+                            {currTime} / {duration || initialSongDuration}
                         </span>
                     </div>
                 </div>
