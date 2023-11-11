@@ -34,6 +34,7 @@ export default function Card({ song, Idx }) {
             return "00:00"; // Return a default value when duration is not available
         }
     }
+
     return (
         song && (<div className="card p-4 rounded-lg flex items-center justify-between">
 

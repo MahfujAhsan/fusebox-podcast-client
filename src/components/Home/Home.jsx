@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../Layout/Layout";
 import Card from "../Card/Card";
 import SongBar from "../MasterBar/SongBar";
@@ -41,14 +41,40 @@ export const songs = [
 export default function Home() {
   
   const dispatch = useDispatch();
+  const [loadedDurations, setLoadedDurations] = useState([]);
+  const [selectedSongDuration, setSelectedSongDuration] = useState(null);
+
   useEffect(() => {
-    const initialSong = songs[0];
-    dispatch(setInitialSong(initialSong));
+    const initializeAudio = (song) => {
+      const audio = song.mp3;
+
+      audio.addEventListener("loadedmetadata", () => {
+        setLoadedDurations((prevDurations) => [
+          ...prevDurations,
+          { id: song.id, duration: audio.duration },
+        ]);
+      });
+
+      const initialSong = songs[0];
+      dispatch(setInitialSong(initialSong));
+      setSelectedSongDuration(audio.duration); // Set initial duration
+    };
+
+    songs.forEach((song) => {
+      initializeAudio(song);
+    });
+
+    // Clean up event listeners when the component unmounts
+    return () => {
+      songs.forEach((song) => {
+        song.mp3.removeEventListener("loadedmetadata", () => { });
+      });
+    };
   }, [dispatch]);
 
   return (
     <Layout>
-      <SongBar />
+      <SongBar selectedSongDuration={selectedSongDuration} />
       <div className="tertiary_bg px-4 py-4 pt-12 w-11/12 mx-auto my-4 rounded-lg">
         <div className="grid gap-6 grid-cols-1">
           <p className="ml-5 text-2xl text-black font-semibold border-b-2 border-black w-[150px] pb-1">All Episodes</p>

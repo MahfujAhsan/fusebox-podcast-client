@@ -12,13 +12,20 @@ import { songs } from "../Home/Home"
 import fusebox from "../../assets/fusbox.jpg"
 
 
-export default function SongBar() {
+export default function SongBar({ selectedSongDuration }) {
     const { masterSong, isPlaying } = useSelector((state) => state.mainSong)
     const { progress, setProgress, resetEverything, currTime, setCurrTime, duration, setDuration, songIdx, setSongIdx } = useGlobalContext()
     const [playbackSpeed, setPlaybackSpeed] = useState(1);
     const [isSubscribed, setIsSubscribed] = useState(false);
 
     const dispatch = useDispatch();
+    
+    useEffect(() => {
+        if (masterSong.mp3) {
+            setDuration(formatTime(masterSong.mp3.duration || selectedSongDuration));
+        }
+        // rest of your code
+    }, [masterSong, isPlaying, selectedSongDuration]);
 
     const handleMaster = () => {
         if (isPlaying) {
@@ -52,7 +59,7 @@ export default function SongBar() {
 
             return () => clearInterval(progressInterval);
         }
-    }, [masterSong, isPlaying]);
+    }, [masterSong, isPlaying, dispatch, progress, setProgress, setDuration, setCurrTime, resetEverything]);
 
     const mouseEnter = () => {
         document.querySelector(".active_progress").style.background = "green"
@@ -182,12 +189,6 @@ export default function SongBar() {
                 </div>
                 <div className="items-center w-8/12 mx-auto pt-4 flex space-x-7 justify-between">
                     <div className="flex items-center space-x-3">
-                        {/* <div onClick={backwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm">
-                            <IoMdSkipBackward />
-                        </div>
-                        <div onClick={forwardSong} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-sm space-x-1">
-                            <IoMdSkipForward />
-                        </div> */}
 
                         <div onClick={backTen} className="border-2 px-2 py-[3px] rounded-full cursor-pointer text-xs flex item-center gap-1">
                             <HiBackward size={14} />
